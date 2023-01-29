@@ -8,8 +8,7 @@ import androidx.work.WorkerParameters
 class MyOneTimeWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
 
   override fun doWork(): Result {
-
-    for (i in 0..200) {
+    for (i in 0..5000) {
       Log.d("MYTAG", "Number ${i}")
     }
     return Result.success()

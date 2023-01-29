@@ -20,8 +20,11 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun callMyFirstWorker() {
-    val request =
-      OneTimeWorkRequest.Builder(MyOneTimeWorker::class.java).build()
-    WorkManager.getInstance(this).enqueue(request)
+    val workManger = WorkManager.getInstance(this)
+    val request = OneTimeWorkRequest.Builder(MyOneTimeWorker::class.java).build()
+    workManger.enqueue(request)
+    workManger.getWorkInfoByIdLiveData(request.id).observe(this) { observer ->
+      binding.tvStatus.text = observer.state.name
+    }
   }
 }
