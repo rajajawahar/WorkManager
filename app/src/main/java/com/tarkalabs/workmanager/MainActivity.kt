@@ -2,6 +2,8 @@ package com.tarkalabs.workmanager
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.work.Constraints
+import androidx.work.NetworkType.CONNECTED
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.tarkalabs.workmanager.databinding.ActivityMainBinding
@@ -21,7 +23,10 @@ class MainActivity : AppCompatActivity() {
 
   private fun callMyFirstWorker() {
     val workManger = WorkManager.getInstance(this)
-    val request = OneTimeWorkRequest.Builder(MyOneTimeWorker::class.java).build()
+    val constraints = Constraints.Builder().setRequiredNetworkType(CONNECTED)
+      .setRequiresCharging(true).build()
+    val request =
+      OneTimeWorkRequest.Builder(MyOneTimeWorker::class.java).setConstraints(constraints).build()
     workManger.enqueue(request)
     workManger.getWorkInfoByIdLiveData(request.id).observe(this) { observer ->
       binding.tvStatus.text = observer.state.name
