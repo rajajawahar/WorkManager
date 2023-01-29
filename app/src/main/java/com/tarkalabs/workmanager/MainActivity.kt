@@ -47,11 +47,10 @@ class MainActivity : AppCompatActivity() {
     val request4 =
       OneTimeWorkRequest.Builder(MyOneTimeWorker4::class.java).setInputData(data).build()
 
-    // workRequests.add(request1)
-    // workRequests.add(request2)
+    workRequests.add(request1)
+    workRequests.add(request2)
 
-    workManger.beginWith(request1)
-      .then(request2)
+    workManger.beginWith(workRequests)
       .then(request3)
       .then(request4).enqueue()
 
