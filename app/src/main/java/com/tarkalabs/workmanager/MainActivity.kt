@@ -1,10 +1,13 @@
 package com.tarkalabs.workmanager
 
 import android.annotation.SuppressLint
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
+import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkInfo.State
 import androidx.work.WorkManager
 import com.tarkalabs.workmanager.databinding.ActivityMainBinding
@@ -12,6 +15,7 @@ import com.tarkalabs.workmanager.worker.MyOneTimeWorker1
 import com.tarkalabs.workmanager.worker.MyOneTimeWorker2
 import com.tarkalabs.workmanager.worker.MyOneTimeWorker3
 import com.tarkalabs.workmanager.worker.MyOneTimeWorker4
+import java.time.Duration
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
+  @RequiresApi(VERSION_CODES.O)
   @SuppressLint("RestrictedApi")
   private fun callMyFirstWorker() {
     val stringMap = mutableMapOf<String, String>()
@@ -37,6 +42,9 @@ class MainActivity : AppCompatActivity() {
     val data = Data(stringMap)
     val workManger = WorkManager.getInstance(this)
     val workRequests = mutableListOf<OneTimeWorkRequest>()
+
+    val periodicWorkRequest =
+      PeriodicWorkRequest.Builder(MyOneTimeWorker3::class.java, Duration.ofMinutes(15)).build()
 
     val request1 =
       OneTimeWorkRequest.Builder(MyOneTimeWorker1::class.java).setInputData(data).build()
